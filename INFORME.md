@@ -6,13 +6,13 @@
 Cuando un proceso se ejecuta cambia su estado a RUNNING, al terminar su ejecución, se espera que cambie su estado de nuevo a RUNNABLE o a otro estado más adecuado, permitiendo al planificador elegir y seleccionar otro proceso.
 
 ### 2) *¿Cuáles son los estados en los que un proceso puede permanecer en xv6-riscv y qué los hace cambiar de estado?*
-Los estados en los que puede estar un proceso son: 
-- UNUSED
-- USED
-- SLEEPING
-- RUNNABLE
-- RUNNING
-- ZOMBIE
+Los estados en los que puede estar un proceso son: \
+\- UNUSED\
+\- USED\
+\- SLEEPING\
+\- RUNNABLE\
+\- RUNNING\
+\- ZOMBIE
 
 Los cambios de estado ocurren por cuestiones como la espera de recursos(RUNNABLE -> SLEEPING), cuando finaliza la ejecución(RUNNING -> ZOMBIE), la reactivación después de un evento(SLEEPING -> RUNNABLE), cuando se acaba el tiempo del quantum (RUNNING -> RUNNABLE) o cuando el planificador elige un proceso (RUNNABLE -> RUNNING)
 
