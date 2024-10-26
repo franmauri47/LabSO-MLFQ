@@ -13,38 +13,39 @@
 
 static char data[IO_OPSIZE];
 
-
-int
+int 
 io_ops()
 {
-    int rfd, wfd;
+  int rfd, wfd;
 
-    int pid = getpid();
+  int pid = getpid();
 
-    // Crear un path unico de archivo
-    char path[] = "12iops";
-    path[0] = '0' + (pid / 10);
-    path[1] = '0' + (pid % 10);
+  // Crear un path unico de archivo
+  char path[] = "12iops";
+  path[0] = '0' + (pid / 10);
+  path[1] = '0' + (pid % 10);
 
-    wfd = open(path, O_CREATE | O_WRONLY);
+  wfd = open(path, O_CREATE | O_WRONLY);
 
-    for(int i = 0; i < IO_EXPERIMENT_LEN; ++i){
-      write(wfd, data, IO_OPSIZE);
-    }
+  for (int i = 0; i < IO_EXPERIMENT_LEN; ++i)
+  {
+    write(wfd, data, IO_OPSIZE);
+  }
 
-    close(wfd);
+  close(wfd);
 
-    rfd = open(path, O_RDONLY);
+  rfd = open(path, O_RDONLY);
 
-    for(int i = 0; i < IO_EXPERIMENT_LEN; ++i){
-      read(rfd, data, IO_OPSIZE);
-    }
+  for (int i = 0; i < IO_EXPERIMENT_LEN; ++i)
+  {
+    read(rfd, data, IO_OPSIZE);
+  }
 
-    close(rfd);
-    return 2 * IO_EXPERIMENT_LEN;
+  close(rfd);
+  return 2 * IO_EXPERIMENT_LEN;
 }
 
-void
+void 
 iobench(int N, int pid)
 {
   memset(data, 'a', sizeof(data));
@@ -53,7 +54,8 @@ iobench(int N, int pid)
 
   int *measurements = malloc(sizeof(int) * N);
 
-  for (int i = 0; i < N; i++){
+  for (int i = 0; i < N; i++)
+  {
     start_tick = uptime();
 
     // Realizar escrituras y lecturas de archivos
@@ -61,7 +63,7 @@ iobench(int N, int pid)
 
     end_tick = uptime();
     elapsed_ticks = end_tick - start_tick;
-    metric = total_iops;  // Cambiar esto por la métrica adecuada
+    metric = total_iops; // Cambiar esto por la métrica adecuada
     measurements[i] = metric;
     printf("%d\t[iobench]\tmetric_name_io\t%d\t%d\t%d\n",
            pid, metric, start_tick, elapsed_ticks);
@@ -72,15 +74,15 @@ int
 main(int argc, char *argv[])
 {
   int N, pid;
-  if (argc != 2) {
+  if (argc != 2)
+  {
     printf("Uso: benchmark N\n");
     exit(1);
   }
 
-  N = atoi(argv[1]);  // Número de repeticiones para los benchmarks
+  N = atoi(argv[1]); // Número de repeticiones para los benchmarks
   pid = getpid();
   iobench(N, pid);
 
   exit(0);
 }
-

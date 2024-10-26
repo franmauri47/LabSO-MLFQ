@@ -8,12 +8,10 @@
 #include "kernel/memlayout.h"
 #include "kernel/riscv.h"
 
-
 #define CPU_MATRIX_SIZE 128
 #define CPU_EXPERIMENT_LEN 256
 
 #define MEASURE_PERIOD 1000
-
 
 // Multiplica dos matrices de tamaño CPU_MATRIX_SIZE x CPU_MATRIX_SIZE
 // y devuelve la cantidad de operaciones realizadas / 1000
