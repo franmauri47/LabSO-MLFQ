@@ -13,7 +13,7 @@
 
 static char data[IO_OPSIZE];
 
-int 
+int
 io_ops()
 {
   int rfd, wfd;
@@ -45,7 +45,7 @@ io_ops()
   return 2 * IO_EXPERIMENT_LEN;
 }
 
-void 
+void
 iobench(int N, int pid)
 {
   memset(data, 'a', sizeof(data));
