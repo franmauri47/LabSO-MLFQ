@@ -76,3 +76,11 @@ En cambio, los procesos I/O bound dependen principalmente de operaciones de entr
 No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de operaciones iobound. Por los siguientes motivos:
 - Distintos recursos, las operaciones cpubound están limitadas por la velocidad del procesamiento de la cpu, lo que nos indica que en general usa el procesador y a esperar hasta que hayan ciclos disponibles. En cambio, la iobound está limitada por la velocidad de los dispositivos de entrada/salida y por el tiempo de espera hasta que la información este lista. Lo cual hace que dependan menos de la cpu.
 - Tiempos de espera: en cpubound se suele ejecutar de forma continua, en cambio, en iobound suele influir la espera, donde el sistema puede cambiar de contexto y permitir a otros procesos ejecutarse.
+
+
+### Graficos
+
+#### IOBENCH
+![iobench](img/iobench.png)
+#### IOBENCH
+![iobench(3)](img/iobench3.png)
