@@ -80,7 +80,7 @@ No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de ope
 
 ### Graficos
 
-#### IOBENCH
+##### IOBENCH
 ![iobench](img/iobench.png)
-#### IOBENCH
+##### IOBENCH 3
 ![iobench(3)](img/iobench3.png)
