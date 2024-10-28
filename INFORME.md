@@ -62,7 +62,15 @@ Paramétros de los programas iobench y cpubench:
 ### 2) ¿Los procesos se ejecutan en paralelo? ¿En promedio, qué proceso o procesos se ejecutan primero? Hacer una observación cualitativa.
 Los procesos no se ejecutan en paralelo ya que estamos ejecutando qemu con CPUS=1 (además esto también desactiva el hyperthreading). El tiempo en ticks no tiene una resolución tan alta como los nanosegundos, por lo que múltiples procesos que comienzan casi al mismo tiempo pueden compartir el mismo start_tick si la diferencia en tiempo de inicio entre ellos es menor que la duración de un solo tick.
 
-Como observamos en las mediciones, en la mayoría de los experimentos se ejecutan primero los procesos cpubench. De 4 ejecuciones del escenario iobench 10 &; cpubench 10 &; cpubench 10 &; cpubench 10 & y 3 del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 & solo en una
+Iteraciones para el escenario **iobench 10 &; cpubench 10 &; cpubench 10 &; cpubench 10 &**:
+
+![alt text](img/it1_io3cpu.png) ![alt text](img/it2_io3cpu.png) ![alt text](img/it3_io3cpu.png) ![alt text](img/it4_io3cpu.png) 
+
+Iteraciones para el escenario **cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &**:
+
+![alt text](img/it1_cpu3io.png) ![alt text](img/it2_cpu3io.png) ![alt text](img/it3_cpu3io.png)
+
+Si ordenamos las mediciones por start_tick de menor a mayor, vemos que en la mayoría de los experimentos se ejecutan primero los procesos cpubench. De 4 ejecuciones del primer escenario y 3 del segundo escenario, solo en una
 ejecución primero corrió el programa iobench, en los demás casos siempre fue primero el cpubench.
 
 ### 3) ¿Cambia el rendimiento de los procesos iobound con respecto a la cantidad y tipo de procesos que se estén ejecutando en paralelo? ¿Por qué?
