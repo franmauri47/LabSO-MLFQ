@@ -57,8 +57,13 @@ Paramétros de los programas iobench y cpubench:
 * total_cpu_kops: total de kilo operaciones que realiza la multiplicación de matrices
 * total_iops: total de operaciones I/O
 * metric: metrica a definir para realizar las mediciones. En nuestro caso la definimos como: metric = total_cpu_kops / elapsed_ticks. Análogamente para operaciones I/O: metric = total_iops / elapsed_ticks. Es decir, la cantidad de operaciones que se realizan por cada tick.
+* N: cantidad de veces que se repite el experimento
 
 ### 2) ¿Los procesos se ejecutan en paralelo? ¿En promedio, qué proceso o procesos se ejecutan primero? Hacer una observación cualitativa.
+Los procesos no se ejecutan en paralelo ya que estamos ejecutando qemu con CPUS=1 (además esto también desactiva el hyperthreading). El tiempo en ticks no tiene una resolución tan alta como los nanosegundos, por lo que múltiples procesos que comienzan casi al mismo tiempo pueden compartir el mismo start_tick si la diferencia en tiempo de inicio entre ellos es menor que la duración de un solo tick.
+
+Como observamos en las mediciones, en la mayoría de los experimentos se ejecutan primero los procesos cpubench. De 4 ejecuciones del escenario iobench 10 &; cpubench 10 &; cpubench 10 &; cpubench 10 & y 3 del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 & solo en una
+ejecución primero corrió el programa iobench, en los demás casos siempre fue primero el cpubench.
 
 ### 3) ¿Cambia el rendimiento de los procesos iobound con respecto a la cantidad y tipo de procesos que se estén ejecutando en paralelo? ¿Por qué?
 
