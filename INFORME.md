@@ -170,8 +170,109 @@ Mediciones realizadas:
 Como se ve en el valor de average_io_metric en las tablas, no cambia significativamente el rendimiento de los procesos iobound cuando se ejecutan en paralelo ya sea más procesos iobound o cpubound. Esto se debe a que las operaciones I/O no dependen de la CPU sino de la velocidad de procesamiento del dispositivo de lectura/escritura, por lo tanto solo este factor alteraría el rendimiento de este tipo de operaciones.
 
 ### 4) ¿Cambia el rendimiento de los procesos cpubound con respecto a la cantidad y tipo de procesos que se estén ejecutando en paralelo? ¿Por qué?
-El rendimiento de los procesos CPU bound sí se ve afectado por la cantidad de procesos ejecutándose en paralelo, especialmente cuando estos procesos son también CPU bound. Esto se debe a que los procesos CPU bound requieren mucho tiempo de procesador y, al ejecutar varios en paralelo, comparten el tiempo de CPU disponible. Como el sistema operativo debe distribuir el tiempo de CPU entre ellos, se reduce el rendimiento.
-En cambio, los procesos I/O bound dependen principalmente de operaciones de entrada/salida, que suelen requerir menos recursos de CPU, permitiendo que los procesos CPU bound utilicen el procesador sin interferencia significativa de los procesos I/O bound. 
+
+Mediciones realizadas:
+
+* **cpubench 10 &**
+
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks | average_cpu_metric |
+|-----|------------|-----------------|--------|------------|---------------|--------------------|
+| 8   | [cpubench] | metric_name_cpu | 14912  | 1804       | 36            | 15212,7            |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 1840       | 35            |                    |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 1875       | 35            |                    |
+| 8   | [cpubench] | metric_name_cpu | 14912  | 1910       | 36            |                    |
+| 8   | [cpubench] | metric_name_cpu | 15789  | 1947       | 34            |                    |
+| 8   | [cpubench] | metric_name_cpu | 14912  | 1981       | 36            |                    |
+| 8   | [cpubench] | metric_name_cpu | 14912  | 2017       | 36            |                    |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 2053       | 35            |                    |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 2088       | 35            |                    |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 2124       | 35            |                    |
+
+* **cpubench 10 &;cpubench 10 &;cpubench 10 &**
+
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks | average_cpu_metric |
+|-----|------------|-----------------|--------|------------|---------------|--------------------|
+| 14  | [cpubench] | metric_name_cpu | 5592   | 4395       | 96            | 5474,266667        |
+| 12  | [cpubench] | metric_name_cpu | 5211   | 4393       | 103           |                    |
+| 15  | [cpubench] | metric_name_cpu | 5112   | 4396       | 105           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5422   | 4491       | 99            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5112   | 4496       | 105           |                    |
+| 15  | [cpubench] | metric_name_cpu | 5112   | 4501       | 105           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5592   | 4590       | 96            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5112   | 4601       | 105           |                    |
+| 15  | [cpubench] | metric_name_cpu | 5263   | 4609       | 102           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5592   | 4686       | 96            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5263   | 4706       | 102           |                    |
+| 15  | [cpubench] | metric_name_cpu | 5263   | 4714       | 102           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5592   | 4782       | 96            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5112   | 4808       | 105           |                    |
+| 15  | [cpubench] | metric_name_cpu | 5422   | 4816       | 99            |                    |
+| 14  | [cpubench] | metric_name_cpu | 5422   | 4878       | 99            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5263   | 4913       | 102           |                    |
+| 15  | [cpubench] | metric_name_cpu | 5422   | 4918       | 99            |                    |
+| 14  | [cpubench] | metric_name_cpu | 5592   | 4977       | 96            |                    |
+| 15  | [cpubench] | metric_name_cpu | 5592   | 5020       | 96            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5112   | 5015       | 105           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5592   | 5073       | 96            |                    |
+| 15  | [cpubench] | metric_name_cpu | 5592   | 5116       | 96            |                    |
+| 12  | [cpubench] | metric_name_cpu | 5263   | 5120       | 102           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5592   | 5169       | 96            |                    |
+| 15  | [cpubench] | metric_name_cpu | 5263   | 5212       | 102           |                    |
+| 12  | [cpubench] | metric_name_cpu | 5112   | 5222       | 105           |                    |
+| 14  | [cpubench] | metric_name_cpu | 5772   | 5268       | 93            |                    |
+| 15  | [cpubench] | metric_name_cpu | 6710   | 5314       | 80            |                    |
+| 12  | [cpubench] | metric_name_cpu | 7157   | 5327       | 75            |                    |
+
+* **cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &**
+
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks | average_cpu_metric |
+|-----|------------|-----------------|--------|------------|---------------|--------------------|
+| 134 | [cpubench] | metric_name_cpu | 12781  | 141667     | 42            | 14348,1            |
+| 134 | [cpubench] | metric_name_cpu | 14508  | 141709     | 37            |                    |
+| 134 | [cpubench] | metric_name_cpu | 14508  | 141746     | 37            |                    |
+| 134 | [cpubench] | metric_name_cpu | 13764  | 141783     | 39            |                    |
+| 134 | [cpubench] | metric_name_cpu | 14912  | 141823     | 36            |                    |
+| 134 | [cpubench] | metric_name_cpu | 14912  | 141859     | 36            |                    |
+| 134 | [cpubench] | metric_name_cpu | 14912  | 141896     | 36            |                    |
+| 134 | [cpubench] | metric_name_cpu | 13764  | 141932     | 39            |                    |
+| 134 | [cpubench] | metric_name_cpu | 14912  | 141972     | 36            |                    |
+| 134 | [cpubench] | metric_name_cpu | 14508  | 142008     | 37            |                    |
+| 136 | [iobench]  | metric_name_io  | 2      | 141667     | 449           |                    |
+| 139 | [iobench]  | metric_name_io  | 2      | 141671     | 461           |                    |
+| 138 | [iobench]  | metric_name_io  | 2      | 141667     | 490           |                    |
+| 138 | [iobench]  | metric_name_io  | 13     | 142157     | 75            |                    |
+| 139 | [iobench]  | metric_name_io  | 7      | 142132     | 130           |                    |
+| 136 | [iobench]  | metric_name_io  | 7      | 142117     | 145           |                    |
+| 139 | [iobench]  | metric_name_io  | 13     | 142262     | 76            |                    |
+| 136 | [iobench]  | metric_name_io  | 10     | 142262     | 95            |                    |
+| 138 | [iobench]  | metric_name_io  | 6      | 142232     | 160           |                    |
+| 139 | [iobench]  | metric_name_io  | 11     | 142339     | 92            |                    |
+| 136 | [iobench]  | metric_name_io  | 11     | 142357     | 93            |                    |
+| 139 | [iobench]  | metric_name_io  | 15     | 142431     | 68            |                    |
+| 138 | [iobench]  | metric_name_io  | 7      | 142392     | 131           |                    |
+| 136 | [iobench]  | metric_name_io  | 10     | 142450     | 100           |                    |
+| 139 | [iobench]  | metric_name_io  | 7      | 142500     | 132           |                    |
+| 136 | [iobench]  | metric_name_io  | 12     | 142550     | 82            |                    |
+| 138 | [iobench]  | metric_name_io  | 6      | 142524     | 152           |                    |
+| 136 | [iobench]  | metric_name_io  | 10     | 142632     | 97            |                    |
+| 139 | [iobench]  | metric_name_io  | 8      | 142632     | 122           |                    |
+| 138 | [iobench]  | metric_name_io  | 10     | 142679     | 97            |                    |
+| 139 | [iobench]  | metric_name_io  | 11     | 142754     | 93            |                    |
+| 136 | [iobench]  | metric_name_io  | 6      | 142730     | 148           |                    |
+| 138 | [iobench]  | metric_name_io  | 10     | 142776     | 102           |                    |
+| 138 | [iobench]  | metric_name_io  | 12     | 142878     | 83            |                    |
+| 139 | [iobench]  | metric_name_io  | 6      | 142847     | 152           |                    |
+| 136 | [iobench]  | metric_name_io  | 8      | 142878     | 121           |                    |
+| 138 | [iobench]  | metric_name_io  | 11     | 142961     | 91            |                    |
+| 136 | [iobench]  | metric_name_io  | 12     | 142999     | 84            |                    |
+| 139 | [iobench]  | metric_name_io  | 10     | 142999     | 97            |                    |
+| 138 | [iobench]  | metric_name_io  | 11     | 143052     | 90            |                    |
+
+
+![alt text](img/cpubench.png)
+
+Como se ve en el valor de average_cpu_metric en las tablas, el rendimiento de los procesos CPU bound sí se ve afectado por la cantidad de procesos ejecutándose en paralelo, especialmente cuando estos procesos son también CPU bound. Esto se debe a que los procesos CPU bound requieren mucho tiempo de procesador y, al ejecutar varios en paralelo, comparten el tiempo de CPU disponible. Como el sistema operativo debe distribuir el tiempo de CPU entre ellos, se reduce el rendimiento.
+En cambio, el rendimiento de los procesos I/O bound depende principalmente del dispositivo de entrada/salida, que requieren menos recursos de CPU, permitiendo que los procesos CPU bound utilicen el procesador sin interferencia significativa de los procesos I/O bound.
 
 ### 5) ¿Es adecuado comparar la cantidad de operaciones de cpu con la cantidad de operaciones iobound?
 No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de operaciones iobound. Por los siguientes motivos:
