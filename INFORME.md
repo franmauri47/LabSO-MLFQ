@@ -33,3 +33,35 @@ El nuevo proceso se elige en la función **scheduler**, que recorre la tabla de 
 
 ###  5)  *¿El cambio de contexto consume tiempo de un *quantum*?*
  El cambio de contexto no consume tiempo del quantum, ya que mientras un proceso se está ejecutando, este no realiza trabajo relacionado al cambio de contexto, solo realiza sus tareas. El cambio de contexto implica guardar el estado del proceso actual y restaurar el estado del nuevo, lo que consume tiempo de **CPU**.
+
+## Segunda Parte: Medir operaciones de cómputo y de entrada/salida
+
+### Experimento 1: ¿Cómo son planificados los programas iobound y cpubound?
+Para este experimento utlizaremos el largo de quantum 10 veces más pequeño que el original y un valor de N constante con valor 4. Se realizaran mediciones en los 
+siguientes escenarios:
+
+a. iobench N &\
+b. iobench N &; iobench N &; iobench N &\
+c. cpubench N &\
+d. cpubench N &; cpubench N &; cpubench N &\
+e. iobench N &; cpubench N &; cpubench N &; cpubench N &\
+f. cpubench N &; iobench N &; iobench N &; iobench N &
+
+### 1) Describa los parámetros de los programas cpubench e iobench para este experimento (o sea, los define al principio y el valor de N. Tener en cuenta que podrían cambiar en experimentos futuros, pero que si lo hacen los resultados ya no serán comparables).
+
+Paramétros de los programas iobench y cpubench:
+
+* start_tick: tick en el cual comienza el proceso, contado desde que inició xv6 
+* end_tick: tick en el cual finaliza el proceso, contado desde que inició xv6 
+* elapsed_ticks: cantidad de ticks que demora en completarse el proceso (diferencia entre end_tick y start_tick)  
+* total_cpu_kops: total de kilo operaciones que realiza la multiplicación de matrices
+* total_iops: total de operaciones I/O
+* metric: metrica a definir para realizar las mediciones. En nuestro caso la definimos como: metric = total_cpu_kops / elapsed_ticks. Análogamente para operaciones I/O: metric = total_iops / elapsed_ticks. Es decir, la cantidad de operaciones que se realizan por cada tick.
+
+### 2) ¿Los procesos se ejecutan en paralelo? ¿En promedio, qué proceso o procesos se ejecutan primero? Hacer una observación cualitativa.
+
+### 3) ¿Cambia el rendimiento de los procesos iobound con respecto a la cantidad y tipo de procesos que se estén ejecutando en paralelo? ¿Por qué?
+
+### 4) ¿Cambia el rendimiento de los procesos cpubound con respecto a la cantidad y tipo de procesos que se estén ejecutando en paralelo? ¿Por qué?
+
+### 5) ¿Es adecuado comparar la cantidad de operaciones de cpu con la cantidad de operaciones iobound?
