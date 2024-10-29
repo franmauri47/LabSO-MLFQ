@@ -295,4 +295,49 @@ No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de ope
 ### 2) ¿Qué cambios se observan con respecto al experimento anterior? ¿Qué comportamientos se mantienen iguales?
 
 ### 3) ¿Con un quantum más pequeño, se ven beneficiados los procesos iobound o los procesos cpubound?
-Los procesos iobench se ven beneficiados con un quantum más pequeño. Como podemos ver en las tablas del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &,  en el caso de quantum=100.000 los procesos iobench , en general, tienen que esperar a que terminen los cpubench. En cambio, con quantum=1.000 vemos una planificación mucho más pareja entre procesos cpubench e iobench. (Insertar tablas)
+Los procesos iobench se ven beneficiados con un quantum más pequeño. Como podemos ver en las tablas del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &,  en el caso de quantum=100.000 los procesos iobench , en general, tienen que esperar a que terminen los cpubench. En cambio, con quantum=1.000 vemos una planificación mucho más pareja entre procesos cpubench e iobench.
+
+#### Quantum(1000) cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &
+
+| pid | bench      | metricname      | metric | start tick | elapsed ticks |
+|-----|------------|-----------------|--------|------------|---------------|
+|  25 | [cpubench] | metric_name_cpu |     13 |    6565696 |         40342 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6565714 |         36830 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6565737 |         41547 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6565861 |         42099 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6602786 |         39850 |
+|  25 | [cpubench] | metric_name_cpu |     12 |    6606386 |         42536 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6607520 |         46810 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6608215 |         42886 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6642908 |         39115 |
+|  25 | [cpubench] | metric_name_cpu |     12 |    6649210 |         43593 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6651426 |         41761 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6654678 |         41792 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6682275 |         38118 |
+|  25 | [cpubench] | metric_name_cpu |     13 |    6693118 |         40208 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6693488 |         42158 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6696650 |         40881 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6720617 |         35798 |
+|  25 | [cpubench] | metric_name_cpu |     13 |    6733643 |         40555 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6735944 |         37135 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6737754 |         38101 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6756710 |         34139 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6773378 |         39900 |
+|  25 | [cpubench] | metric_name_cpu |     13 |    6774430 |         41071 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6776229 |         37910 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6791058 |         35290 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6813552 |         41739 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6814366 |         45736 |
+|  25 | [cpubench] | metric_name_cpu |     13 |    6815666 |         40688 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6826568 |         35502 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6855614 |         41507 |
+|  25 | [cpubench] | metric_name_cpu |     14 |    6856701 |         38103 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6860538 |         37455 |
+|  29 | [iobench]  | metric_name_io  |      3 |    6862396 |         31837 |
+|  29 | [iobench]  | metric_name_io  |      2 |    6894458 |         35321 |
+|  25 | [cpubench] | metric_name_cpu |     13 |    6895082 |         39557 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6897453 |         40100 |
+|  27 | [iobench]  | metric_name_io  |      2 |    6898206 |         40689 |
+|  25 | [cpubench] | metric_name_cpu |     15 |    6934877 |         34693 |
+|  30 | [iobench]  | metric_name_io  |      2 |    6937785 |         35067 |
+|  27 | [iobench]  | metric_name_io  |      3 |    6939082 |         32724 |
