@@ -293,6 +293,15 @@ No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de ope
 ### 1) ¿Fue necesario modificar las métricas para que los resultados fueran comparables? ¿Por qué?
 
 ### 2) ¿Qué cambios se observan con respecto al experimento anterior? ¿Qué comportamientos se mantienen iguales?
+Es evidente que al reducir el quantum, la cantidad de procesos que se realizan por tick se reduce drásticamente, como se puede ver en las siguientes tablas 
+
+
+Sin embargo, la división de recursos entre los procesos CPU-bound se mantiene igual, es decir, si un proceso de este tipo se ejecuta junto a otros dos, tardará (aproximadamente) tres veces más en terminar su ejecución, tal como sucedía con el quantum original. Esto se debe a la ya mencionada competencia por recursos entre los procesos CPU-bound. Si comparamos los siguientes resultados de ejecutar "cpubench 10 &; cpubench 10 &; cpubench 10 &" con la ejecución de uno solo, notaremos esta relación anteriormente mencionada.
+
+
+
+Otro comportamiento que se mantiene es que, sin importar la cantidad de procesos I/O-bound que se ejecuten paralelamente, todos mantendrán la misma relación de "ejecuciones por tick" que si se estuviera ejecutando un solo proceso I/O-bound. A continuación, el ejemplo de ejecutar "iobench 10 &" comparado con "iobench 10 &; iobench 10 &; iobench 10 &" en Q = 1.000.
+
 
 ### 3) ¿Con un quantum más pequeño, se ven beneficiados los procesos iobound o los procesos cpubound?
 Los procesos iobench se ven beneficiados con un quantum más pequeño. Como podemos ver en las tablas del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &,  en el caso de quantum=100.000 los procesos iobench , en general, tienen que esperar a que terminen los cpubench. En cambio, con quantum=1.000 vemos una planificación mucho más pareja entre procesos cpubench e iobench.
