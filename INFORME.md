@@ -295,13 +295,134 @@ No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de ope
 ### 2) ¿Qué cambios se observan con respecto al experimento anterior? ¿Qué comportamientos se mantienen iguales?
 Es evidente que al reducir el quantum, la cantidad de procesos que se realizan por tick se reduce drásticamente, como se puede ver en las siguientes tablas 
 
+* **cpubench 10 &;**
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
+|-----|------------|-----------------|--------|------------|---------------|
+| 8   | [cpubench] | metric_name_cpu | 14912  | 1804       | 36            |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 1840       | 35            |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 1875       | 35            |
+| 8   | [cpubench] | metric_name_cpu | 14912  | 1910       | 36            |
+| 8   | [cpubench] | metric_name_cpu | 15789  | 1947       | 34            |
+| 8   | [cpubench] | metric_name_cpu | 14912  | 1981       | 36            |
+| 8   | [cpubench] | metric_name_cpu | 14912  | 2017       | 36            |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 2053       | 35            |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 2088       | 35            |
+| 8   | [cpubench] | metric_name_cpu | 15338  | 2124       | 35            |
+
+* **cpubench 10 &; Q=10.000**
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
+|-----|------------|-----------------|--------|------------|---------------|
+| 4   | [cpubench] | metric_name_cpu | 1931   | 5833       | 278           |
+| 4   | [cpubench] | metric_name_cpu | 1726   | 6113       | 311           |
+| 4   | [cpubench] | metric_name_cpu | 1338   | 6428       | 401           |
+| 4   | [cpubench] | metric_name_cpu | 1355   | 6833       | 396           |
+| 4   | [cpubench] | metric_name_cpu | 1355   | 7233       | 396           |
+| 4   | [cpubench] | metric_name_cpu | 1345   | 7633       | 399           |
+| 4   | [cpubench] | metric_name_cpu | 1352   | 8036       | 397           |
+| 4   | [cpubench] | metric_name_cpu | 1345   | 8437       | 399           |
+| 4   | [cpubench] | metric_name_cpu | 1352   | 8840       | 397           |
+| 4   | [cpubench] | metric_name_cpu | 1345   | 9241       | 399           |
+
+* **cpubench 10 &; Q=1.000**
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
+|-----|------------|-----------------|--------|------------|---------------|
+| 18  | [cpubench] | metric_name_cpu | 12     | 1420566    | 42165         |
+| 18  | [cpubench] | metric_name_cpu | 22     | 1462930    | 23994         |
+| 18  | [cpubench] | metric_name_cpu | 23     | 1487029    | 22871         |
+| 18  | [cpubench] | metric_name_cpu | 11     | 1509990    | 47454         |
+| 18  | [cpubench] | metric_name_cpu | 17     | 1557566    | 30151         |
+| 18  | [cpubench] | metric_name_cpu | 28     | 1587816    | 18545         |
+| 18  | [cpubench] | metric_name_cpu | 25     | 1606456    | 21039         |
+| 18  | [cpubench] | metric_name_cpu | 22     | 1627601    | 24400         |
+| 18  | [cpubench] | metric_name_cpu | 17     | 1652129    | 30210         |
+| 18  | [cpubench] | metric_name_cpu | 16     | 1682442    | 32617         |
 
 Sin embargo, la división de recursos entre los procesos CPU-bound se mantiene igual, es decir, si un proceso de este tipo se ejecuta junto a otros dos, tardará (aproximadamente) tres veces más en terminar su ejecución, tal como sucedía con el quantum original. Esto se debe a la ya mencionada competencia por recursos entre los procesos CPU-bound. Si comparamos los siguientes resultados de ejecutar "cpubench 10 &; cpubench 10 &; cpubench 10 &" con la ejecución de uno solo, notaremos esta relación anteriormente mencionada.
 
+* **cpubench 10 &; cpubench 10 &; cpubench 10 &**
+| program    | metric_name     | pid Q= 100.000 | metric Q = 100.000 | pid Q=10.000 | metric Q=10.000 | pid Q=1.000 | metric Q=1.000 |
+|------------|-----------------|----------------|--------------------|--------------|-----------------|-------------|----------------|
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 487             | 8           | 6              |
+| [cpubench] | metric_name_cpu | 12             | 5211               | 8            | 470             | 5           | 4              |
+| [cpubench] | metric_name_cpu | 15             | 5112               | 9            | 461             | 7           | 4              |
+| [cpubench] | metric_name_cpu | 14             | 5422               | 6            | 537             | 8           | 4              |
+| [cpubench] | metric_name_cpu | 12             | 5112               | 8            | 514             | 5           | 4              |
+| [cpubench] | metric_name_cpu | 15             | 5112               | 9            | 509             | 7           | 4              |
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 504             | 8           | 3              |
+| [cpubench] | metric_name_cpu | 12             | 5112               | 8            | 494             | 5           | 4              |
+| [cpubench] | metric_name_cpu | 15             | 5263               | 9            | 483             | 7           | 4              |
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 675             | 5           | 16             |
+| [cpubench] | metric_name_cpu | 12             | 5263               | 8            | 634             | 7           | 20             |
+| [cpubench] | metric_name_cpu | 15             | 5263               | 9            | 606             | 8           | 5              |
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 509             | 5           | 6              |
+| [cpubench] | metric_name_cpu | 12             | 5112               | 8            | 467             | 7           | 6              |
+| [cpubench] | metric_name_cpu | 15             | 5422               | 9            | 457             | 8           | 5              |
+| [cpubench] | metric_name_cpu | 14             | 5422               | 6            | 483             | 5           | 14             |
+| [cpubench] | metric_name_cpu | 12             | 5263               | 8            | 469             | 7           | 14             |
+| [cpubench] | metric_name_cpu | 15             | 5422               | 9            | 456             | 5           | 23             |
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 488             | 7           | 23             |
+| [cpubench] | metric_name_cpu | 15             | 5592               | 8            | 467             | 5           | 23             |
+| [cpubench] | metric_name_cpu | 12             | 5112               | 9            | 455             | 7           | 23             |
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 486             | 8           | 8              |
+| [cpubench] | metric_name_cpu | 15             | 5592               | 8            | 469             | 5           | 19             |
+| [cpubench] | metric_name_cpu | 12             | 5263               | 9            | 460             | 7           | 18             |
+| [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 486             | 5           | 14             |
+| [cpubench] | metric_name_cpu | 15             | 5263               | 8            | 469             | 7           | 10             |
+| [cpubench] | metric_name_cpu | 12             | 5112               | 9            | 457             | 8           | 6              |
+| [cpubench] | metric_name_cpu | 14             | 5772               | 6            | 487             | 8           | 15             |
+| [cpubench] | metric_name_cpu | 15             | 6710               | 8            | 538             | 8           | 21             |
+| [cpubench] | metric_name_cpu | 12             | 7157               | 9            | 631             | 8           | 19             |
 
 
 Otro comportamiento que se mantiene es que, sin importar la cantidad de procesos I/O-bound que se ejecuten paralelamente, todos mantendrán la misma relación de "ejecuciones por tick" que si se estuviera ejecutando un solo proceso I/O-bound. A continuación, el ejemplo de ejecutar "iobench 10 &" comparado con "iobench 10 &; iobench 10 &; iobench 10 &" en Q = 1.000.
 
+* **iobench 10 &**
+| program   | metric_name    | pid Q =  100.000 | metric Q= 100.000 | pid Q = 1.000 | metric Q= 1.000 |
+|-----------|----------------|------------------|-------------------|---------------|-----------------|
+| [iobench] | metric_name_io | 21               | 8                 | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 10                | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 8                 | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 9                 | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 9                 | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 10                | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 10                | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 10                | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 8                 | 4             | 0,04            |
+| [iobench] | metric_name_io | 21               | 9                 | 4             | 0,04            |
+
+* **iobench 10 &; iobench 10 &; iobench 10 &**
+| program   | metric_name    | pid Q = 100.000 | metric Q= 100.000 | pid Q = 1.000 | metric Q= 1.000 |
+|-----------|----------------|-----------------|-------------------|---------------|-----------------|
+| [iobench] | metric_name_io | 27              | 8                 | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 8                 | 12            | 0,03            |
+| [iobench] | metric_name_io | 25              | 7                 | 13            | 0,03            |
+| [iobench] | metric_name_io | 27              | 10                | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 9                 | 12            | 0,03            |
+| [iobench] | metric_name_io | 25              | 9                 | 13            | 0,03            |
+| [iobench] | metric_name_io | 27              | 9                 | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 10                | 12            | 0,03            |
+| [iobench] | metric_name_io | 25              | 7                 | 13            | 0,03            |
+| [iobench] | metric_name_io | 28              | 11                | 10            | 0,03            |
+| [iobench] | metric_name_io | 27              | 5                 | 12            | 0,03            |
+| [iobench] | metric_name_io | 28              | 14                | 13            | 0,03            |
+| [iobench] | metric_name_io | 25              | 8                 | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 11                | 12            | 0,03            |
+| [iobench] | metric_name_io | 27              | 8                 | 13            | 0,03            |
+| [iobench] | metric_name_io | 25              | 8                 | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 10                | 12            | 0,03            |
+| [iobench] | metric_name_io | 25              | 12                | 13            | 0,03            |
+| [iobench] | metric_name_io | 27              | 6                 | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 8                 | 12            | 0,03            |
+| [iobench] | metric_name_io | 25              | 8                 | 13            | 0,03            |
+| [iobench] | metric_name_io | 27              | 11                | 10            | 0,03            |
+| [iobench] | metric_name_io | 25              | 15                | 12            | 0,03            |
+| [iobench] | metric_name_io | 27              | 11                | 13            | 0,03            |
+| [iobench] | metric_name_io | 25              | 16                | 10            | 0,03            |
+| [iobench] | metric_name_io | 28              | 5                 | 12            | 0,03            |
+| [iobench] | metric_name_io | 27              | 9                 | 13            | 0,03            |
+| [iobench] | metric_name_io | 28              | 12                | 10            | 0,03            |
+| [iobench] | metric_name_io | 25              | 8                 | 12            | 0,03            |
+| [iobench] | metric_name_io | 27              | 10                | 13            | 0,03            |
 
 ### 3) ¿Con un quantum más pequeño, se ven beneficiados los procesos iobound o los procesos cpubound?
 Los procesos iobench se ven beneficiados con un quantum más pequeño. Como podemos ver en las tablas del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &,  en el caso de quantum=100.000 los procesos iobench , en general, tienen que esperar a que terminen los cpubench. En cambio, con quantum=1.000 vemos una planificación mucho más pareja entre procesos cpubench e iobench.
