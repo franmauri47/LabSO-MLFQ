@@ -6,6 +6,8 @@
 #include "proc.h"
 #include "defs.h"
 
+#define NPRIO 3
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -124,6 +126,8 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->priority = NPRIO-1u;
+  p->schedCounter = 0;
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -169,6 +173,8 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  p->priority = 0;
+  p->schedCounter = 0;
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -459,6 +465,7 @@ scheduler(void)
         // to release its lock and then reacquire it
         // before jumping back to us.
         p->state = RUNNING;
+        p->schedCounter += 1;
         c->proc = p;
         swtch(&c->context, &p->context);
 
@@ -466,6 +473,7 @@ scheduler(void)
         // It should have changed its p->state before coming back.
         c->proc = 0;
       }
+      
       release(&p->lock);
     }
   }
@@ -505,6 +513,9 @@ yield(void)
   struct proc *p = myproc();
   acquire(&p->lock);
   p->state = RUNNABLE;
+  if(p->priority > 0){
+    p->priority -= 1;
+  }
   sched();
   release(&p->lock);
 }
@@ -550,6 +561,9 @@ sleep(void *chan, struct spinlock *lk)
   // Go to sleep.
   p->chan = chan;
   p->state = SLEEPING;
+  if(p->priority < NPRIO-1){
+    p->priority += 1;
+  }
 
   sched();
 
@@ -662,7 +676,7 @@ procdump(void)
   [UNUSED]    "unused",
   [USED]      "used",
   [SLEEPING]  "sleep ",
-  [RUNNABLE]  "runble",
+  [RUNNABLE]  "runable",
   [RUNNING]   "run   ",
   [ZOMBIE]    "zombie"
   };
@@ -677,7 +691,7 @@ procdump(void)
       state = states[p->state];
     else
       state = "???";
-    printf("%d %s %s", p->pid, state, p->name);
+    printf("%d %s %s %d", p->pid, state, p->name, p->priority);
     printf("\n");
   }
 }
