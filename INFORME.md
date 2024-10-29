@@ -292,6 +292,49 @@ No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de ope
 
 ### 1) ¿Fue necesario modificar las métricas para que los resultados fueran comparables? ¿Por qué?
 
+Sí, **solo** fue necesario modificar las métricas en iobench para que los resultados fueran comparables.
+
+
+La razón principal es que al reducir el quantum, el sistema operativo interrumpe los procesos con mayor frecuencia, lo que introduce un overhead de cambios de contexto. Este overhead afecta el tiempo de **finalización** de los procesos, **incrementándolo**.
+
+
+Sin ajustar las métricas, las operaciones no se registraban de manera representativa (en el caso inicial, mostraban 0 en iobench), lo que dificultaba la comparación de resultados.
+Al modificar la métrica,como lo hicimos al multiplicarlas por 10 (Q=10.000) y 100 (Q=1.000) en iobench, logramos que los valores de operaciones reflejaran de manera más precisa la cantidad de trabajo realizado, permitiendo una evaluación más clara y objetiva del rendimiento.
+
+
+* **iobench 10 & SIN MODIFICAR METRICA (Q=10.000)**
+
+
+| pid | program   | metric_name    | ops | start_tick | elapsed_ticks |
+|-----|-----------|----------------|-----|------------|---------------|
+| pid | [iobench] | metric_name_io |   0 |      10537 |          1419 |
+| pid | [iobench] | metric_name_io |   0 |      11959 |          1365 |
+| pid | [iobench] | metric_name_io |   0 |      13328 |          1382 |
+| pid | [iobench] | metric_name_io |   0 |      14714 |          1149 |
+| pid | [iobench] | metric_name_io |   0 |      15867 |          1132 |
+| pid | [iobench] | metric_name_io |   0 |      17003 |          1312 |
+| pid | [iobench] | metric_name_io |   0 |      18317 |          1238 |
+| pid | [iobench] | metric_name_io |   0 |      19559 |          1379 |
+| pid | [iobench] | metric_name_io |   0 |      20941 |          1349 |
+| pid | [iobench] | metric_name_io |   0 |      22293 |          1319 |
+
+
+* **cpubench 10 & SIN MODIFICAR METRICA (Q=10.000)**
+
+
+| pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
+|-----|------------|-----------------|--------|------------|---------------|
+|   4 | [cpubench] | metric_name_cpu |   1931 |       5833 |           278 |
+|   4 | [cpubench] | metric_name_cpu |   1726 |       6113 |           311 |
+|   4 | [cpubench] | metric_name_cpu |   1338 |       6428 |           401 |
+|   4 | [cpubench] | metric_name_cpu |   1355 |       6833 |           396 |
+|   4 | [cpubench] | metric_name_cpu |   1355 |       7233 |           396 |
+|   4 | [cpubench] | metric_name_cpu |   1345 |       7633 |           399 |
+|   4 | [cpubench] | metric_name_cpu |   1352 |       8036 |           397 |
+|   4 | [cpubench] | metric_name_cpu |   1345 |       8437 |           399 |
+|   4 | [cpubench] | metric_name_cpu |   1352 |       8840 |           397 |
+|   4 | [cpubench] | metric_name_cpu |   1345 |       9241 |           399 |
+
 ### 2) ¿Qué cambios se observan con respecto al experimento anterior? ¿Qué comportamientos se mantienen iguales?
 Es evidente que al reducir el quantum, la cantidad de procesos que se realizan por tick se reduce drásticamente, como se puede ver en las siguientes tablas 
 
