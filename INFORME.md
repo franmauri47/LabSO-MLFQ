@@ -339,6 +339,7 @@ Al modificar la métrica,como lo hicimos al multiplicarlas por 10 (Q=10.000) y 1
 Es evidente que al reducir el quantum, la cantidad de procesos que se realizan por tick se reduce drásticamente, como se puede ver en las siguientes tablas 
 
 * **cpubench 10 &;**
+
 | pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
 |-----|------------|-----------------|--------|------------|---------------|
 | 8   | [cpubench] | metric_name_cpu | 14912  | 1804       | 36            |
@@ -353,6 +354,7 @@ Es evidente que al reducir el quantum, la cantidad de procesos que se realizan p
 | 8   | [cpubench] | metric_name_cpu | 15338  | 2124       | 35            |
 
 * **cpubench 10 &; Q=10.000**
+
 | pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
 |-----|------------|-----------------|--------|------------|---------------|
 | 4   | [cpubench] | metric_name_cpu | 1931   | 5833       | 278           |
@@ -367,6 +369,7 @@ Es evidente que al reducir el quantum, la cantidad de procesos que se realizan p
 | 4   | [cpubench] | metric_name_cpu | 1345   | 9241       | 399           |
 
 * **cpubench 10 &; Q=1.000**
+
 | pid | program    | metric_name     | metric | start_tick | elapsed_ticks |
 |-----|------------|-----------------|--------|------------|---------------|
 | 18  | [cpubench] | metric_name_cpu | 12     | 1420566    | 42165         |
@@ -383,6 +386,7 @@ Es evidente que al reducir el quantum, la cantidad de procesos que se realizan p
 Sin embargo, la división de recursos entre los procesos CPU-bound se mantiene igual, es decir, si un proceso de este tipo se ejecuta junto a otros dos, tardará (aproximadamente) tres veces más en terminar su ejecución, tal como sucedía con el quantum original. Esto se debe a la ya mencionada competencia por recursos entre los procesos CPU-bound. Si comparamos los siguientes resultados de ejecutar "cpubench 10 &; cpubench 10 &; cpubench 10 &" con la ejecución de uno solo, notaremos esta relación anteriormente mencionada.
 
 * **cpubench 10 &; cpubench 10 &; cpubench 10 &**
+
 | program    | metric_name     | pid Q= 100.000 | metric Q = 100.000 | pid Q=10.000 | metric Q=10.000 | pid Q=1.000 | metric Q=1.000 |
 |------------|-----------------|----------------|--------------------|--------------|-----------------|-------------|----------------|
 | [cpubench] | metric_name_cpu | 14             | 5592               | 6            | 487             | 8           | 6              |
@@ -420,6 +424,7 @@ Sin embargo, la división de recursos entre los procesos CPU-bound se mantiene i
 Otro comportamiento que se mantiene es que, sin importar la cantidad de procesos I/O-bound que se ejecuten paralelamente, todos mantendrán la misma relación de "ejecuciones por tick" que si se estuviera ejecutando un solo proceso I/O-bound. A continuación, el ejemplo de ejecutar "iobench 10 &" comparado con "iobench 10 &; iobench 10 &; iobench 10 &" en Q = 1.000.
 
 * **iobench 10 &**
+
 | program   | metric_name    | pid Q =  100.000 | metric Q= 100.000 | pid Q = 1.000 | metric Q= 1.000 |
 |-----------|----------------|------------------|-------------------|---------------|-----------------|
 | [iobench] | metric_name_io | 21               | 8                 | 4             | 0,04            |
@@ -434,6 +439,7 @@ Otro comportamiento que se mantiene es que, sin importar la cantidad de procesos
 | [iobench] | metric_name_io | 21               | 9                 | 4             | 0,04            |
 
 * **iobench 10 &; iobench 10 &; iobench 10 &**
+
 | program   | metric_name    | pid Q = 100.000 | metric Q= 100.000 | pid Q = 1.000 | metric Q= 1.000 |
 |-----------|----------------|-----------------|-------------------|---------------|-----------------|
 | [iobench] | metric_name_io | 27              | 8                 | 10            | 0,03            |
