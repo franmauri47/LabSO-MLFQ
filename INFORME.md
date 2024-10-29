@@ -286,3 +286,12 @@ En cambio, el rendimiento de los procesos I/O bound depende principalmente del d
 No es adecuado comparar la cantidad de operaciones de cpu con la cantidad de operaciones iobound. Por los siguientes motivos:
 - Distintos recursos, las operaciones cpubound están limitadas por la velocidad del procesamiento de la cpu, lo que nos indica que en general usa el procesador y a esperar hasta que hayan ciclos disponibles. En cambio, la iobound está limitada por la velocidad de los dispositivos de entrada/salida y por el tiempo de espera hasta que la información este lista. Lo cual hace que dependan menos de la cpu.
 - Tiempos de espera: en cpubound se suele ejecutar de forma continua, en cambio, en iobound suele influir la espera, donde el sistema puede cambiar de contexto y permitir a otros procesos ejecutarse.
+
+
+## Segunda parte: ¿Qué sucede cuando cambiamos el largo del quantum?
+
+### 1) ¿Fue necesario modificar las métricas para que los resultados fueran comparables? ¿Por qué?
+
+### 2) ¿Qué cambios se observan con respecto al experimento anterior? ¿Qué comportamientos se mantienen iguales?
+
+### 3) ¿Con un quantum más pequeño, se ven beneficiados los procesos iobound o los procesos cpubound?
