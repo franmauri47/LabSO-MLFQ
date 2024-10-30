@@ -459,6 +459,7 @@ scheduler(void)
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
+    // Iterates the priority levels
     for (uint i = NPRIO-1; i < NPRIO; i--)
     {
       // Initialize selected process variable
@@ -466,8 +467,10 @@ scheduler(void)
       for (p = proc; p < &proc[NPROC]; p++)
       {
         acquire(&p->lock);
+        // Validate if process 'p' has priority 'i' and if it's runnable
         if (p->state == RUNNABLE && p->priority == i)
         {
+          // Validates if process 'p' has been less scheduled that current process
           if (selected_proc == 0 || p->schedCounter < selected_proc->schedCounter)
           {
             // Choose the process with the lowest schedCounter value
