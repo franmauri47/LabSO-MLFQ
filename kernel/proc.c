@@ -459,11 +459,8 @@ scheduler(void)
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
-    uint i = NPRIO;
-    while (i > 0)
+    for (uint i = NPRIO-1; i < NPRIO; i--)
     {
-      i--;
-
       // Initialize selected process variable
       struct proc *selected_proc = 0;
       for (p = proc; p < &proc[NPROC]; p++)
