@@ -452,29 +452,60 @@ scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
-  
+
   c->proc = 0;
-  for(;;){
+  for (;;)
+  {
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
-    for(p = proc; p < &proc[NPROC]; p++) {
-      acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        p->state = RUNNING;
-        p->schedCounter += 1;
-        c->proc = p;
-        swtch(&c->context, &p->context);
+    uint i = NPRIO;
+    while (i > 0)
+    {
+      i--;
 
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
+      // Initialize selected process variable
+      struct proc *selected_proc = 0;
+      for (p = proc; p < &proc[NPROC]; p++)
+      {
+        acquire(&p->lock);
+        if (p->state == RUNNABLE && p->priority == i)
+        {
+          if (selected_proc == 0 || p->schedCounter < selected_proc->schedCounter)
+          {
+            // Choose the process with the lowest schedCounter value
+            if (selected_proc != 0)
+            {
+              // Release previously selected process lock
+              release(&selected_proc->lock);
+            }
+            selected_proc = p;
+          }
+          else
+          {
+            // Release lock if the process isn't selected
+            release(&p->lock);
+          }
+        }
+        else
+        {
+          // Release process lock if isn't runnable or doesn't have the correct priority
+          release(&p->lock);
+        }
       }
-      
-      release(&p->lock);
+
+      if (selected_proc)
+      {
+        selected_proc->state = RUNNING;
+        selected_proc->schedCounter += 1;
+        c->proc = selected_proc;
+        swtch(&c->context, &selected_proc->context);
+
+        // The process is no longer running at comming back
+        c->proc = 0;
+        // Release the lock for the already executed process
+        release(&selected_proc->lock);
+      }
     }
   }
 }
