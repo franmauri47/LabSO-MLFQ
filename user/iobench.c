@@ -63,7 +63,7 @@ iobench(int N, int pid)
 
     end_tick = uptime();
     elapsed_ticks = end_tick - start_tick;
-    metric = total_iops; // Cambiar esto por la métrica adecuada
+    metric = total_iops / elapsed_ticks; // Cambiar esto por la métrica adecuada
     measurements[i] = metric;
     printf("%d\t[iobench]\tmetric_name_io\t%d\t%d\t%d\n",
            pid, metric, start_tick, elapsed_ticks);
