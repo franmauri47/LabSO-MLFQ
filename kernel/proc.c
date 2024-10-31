@@ -511,15 +511,15 @@ scheduler(void)
         release(&selected_proc->lock);
       }
 
-      // Every 10 quantums, all the runnable process will 
+      // Every 5 quantums, all the runnable process will 
       // receive the max priority
-      if (cycles_counter % (QUANTUM * 1) == 0)
+      if (cycles_counter % (QUANTUM * 5) == 0)
       {
         // printf("Priority boosted\n");
         for (p = proc; p < &proc[NPROC]; p++) 
         {
           acquire(&p->lock);
-          if (p->priority == 0)
+          if (p->priority == 0 || p->priority == 1)
           {
             p->priority = NPRIO-1;
           }
