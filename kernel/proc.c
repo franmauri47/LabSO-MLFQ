@@ -452,6 +452,8 @@ scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
+  // This variable it's used for priority boost
+  uint cycles_counter = 0;
 
   c->proc = 0;
 
@@ -465,6 +467,7 @@ scheduler(void)
     // Iterates the priority levels
     for (uint i = NPRIO-1; i < NPRIO; i--)
     {
+      cycles_counter += 5 ;
       // Initialize selected process variable
       struct proc *selected_proc = 0;
       for (p = proc; p < &proc[NPROC]; p++)
@@ -510,6 +513,23 @@ scheduler(void)
         c->proc = 0;
         // Release the lock for the already executed process
         release(&selected_proc->lock);
+      }
+
+      // Every 10 quantums, all the runnable process will 
+      // receive the max priority
+      if (cycles_counter % (QUANTUM * 1) == 0)
+      {
+        // printf("Priority boosted\n");
+        for (p = proc; p < &proc[NPROC]; p++) 
+        {
+          acquire(&p->lock);
+          if (p->priority == 0)
+          {
+            p->priority = NPRIO-1;
+          }
+          release(&p->lock);
+        }
+        cycles_counter = 0;
       }
     }
 
