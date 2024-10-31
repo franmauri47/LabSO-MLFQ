@@ -189,4 +189,4 @@ void            virtio_disk_intr(void);
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
 
 // quantum variable
-#define QUANTUM 100000
+#define QUANTUM 1000000
