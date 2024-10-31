@@ -520,3 +520,31 @@ Los procesos iobench se ven beneficiados con un quantum más pequeño. Como pode
 |  25 | [cpubench] | metric_name_cpu |     15 |    6934877 |         34693 |
 |  30 | [iobench]  | metric_name_io  |      2 |    6937785 |         35067 |
 |  27 | [iobench]  | metric_name_io  |      3 |    6939082 |         32724 |
+
+
+## Cuarta parte: Implementar MLFQ
+
+### 2) Mediciones para el nuevo planificador
+
+### Quantum=100.000
+![alt text](img/quantum_100000.png)
+
+## Escenario iobench 10 &; cpubench 10 &; cpubench 10 &; cpubench 10 & 
+Vemos que en promedio, al utilizar MLFQ la métrica de I/O mejora en una unidad por cada tick pero finaliza estos procesos en menos ticks.
+
+## Escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &
+Se observa que en un tick menos, al utilizar MLFQ la métrica de operaciones de cómputo mejora en 639 unidades más respecto al caso sin MLFQ.
+
+### Quantum=10.000
+![alt text](img/quantum_10000.png)
+
+## Escenario iobench 10 &; cpubench 10 &; cpubench 10 &; cpubench 10 & 
+A pesar de mantenerse casi igual la métrica de operaciones I/O, al usar MLFQ la cantidad de ticks transcurridos en promedio, aumentó.
+
+## Escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 &
+En este caso se observa que al usar MLFQ disminuyó la métrica de cómputo y aumentó la cantidad de ticks promedio en finalizar este tipo de procesos.
+
+### Quantum=1.000
+![alt text](img/quantum_1000.png)
+
+En ambos escenarios se observa que con el uso de MLFQ tanto la métrica de cada proceso (I/O y CPU) empeora y el promedio de ticks transcurridos aumenta.
