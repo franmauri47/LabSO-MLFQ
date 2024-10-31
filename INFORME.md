@@ -548,3 +548,51 @@ En este caso se observa que al usar MLFQ disminuyó la métrica de cómputo y au
 ![alt text](img/quantum_1000.png)
 
 En ambos escenarios se observa que con el uso de MLFQ tanto la métrica de cada proceso (I/O y CPU) empeora y el promedio de ticks transcurridos aumenta.
+
+### 3) ¿Se puede producir starvation en el nuevo planificador?
+Como podemos ver en las mediciones del escenario cpubench 10 &; iobench 10 &; iobench 10 &; iobench 10 & (metrica IO *1000, CPU sin mod)
+se produce starvation para los procesos cpubound que quedan relegados ya que los iobound toman prioridad más alta al liberar la cpu antes de que termine el quantum. Para valores más elevados de los parámetros, los procesos cpubound podrían no ejecutarse. Es decir, que los cpubound se ejecutaran cuando ya no hayan procesos con prioridad alta.
+Una posible solucion seria la implementacion de un timer para reiniciar la prioridad de todos los procesos en cola (priority boost).
+
+| pid | bench      | metricname      | metric | start tick | elapsed ticks |
+|-----|------------|-----------------|--------|------------|---------------|
+| 8   | [iobench]  | metric_name_io  | 4      | 290372     | 248736        |
+| 10  | [iobench]  | metric_name_io  | 4      | 290342     | 250645        |
+| 11  | [iobench]  | metric_name_io  | 3      | 290376     | 307931        |
+| 10  | [iobench]  | metric_name_io  | 1      | 542233     | 786019        |
+| $ 8 | [iobench]  | metric_name_io  | 1      | 540262     | 836384        |
+| 11  | [iobench]  | metric_name_io  | 2      | 962276     | 510717        |
+| 10  | [iobench]  | metric_name_io  | 3      | 1361148    | 306448        |
+| 8   | [iobench]  | metric_name_io  | 2      | 1378914    | 345576        |
+| 11  | [iobench]  | metric_name_io  | 3      | 1496345    | 327248        |
+| 6   | [cpubench] | metric_name_cpu | 0      | 290370     | 1565950       |
+| 10  | [iobench]  | metric_name_io  | 2      | 1668359    | 385671        |
+| 8   | [iobench]  | metric_name_io  | 0      | 1725200    | 2525701       |
+| 11  | [iobench]  | metric_name_io  | 0      | 1824916    | 2979982       |
+| 10  | [iobench]  | metric_name_io  | 0      | 2059526    | 2895292       |
+| 8   | [iobench]  | metric_name_io  | 3      | 4750702    | 320240        |
+| 11  | [iobench]  | metric_name_io  | 3      | 4805527    | 339786        |
+| 10  | [iobench]  | metric_name_io  | 3      | 4955904    | 288656        |
+| 8   | [iobench]  | metric_name_io  | 4      | 5071675    | 254010        |
+| 6   | [cpubench] | metric_name_cpu | 0      | 1857561    | 3503747       |
+| 11  | [iobench]  | metric_name_io  | 4      | 5146690    | 227730        |
+| 10  | [iobench]  | metric_name_io  | 7      | 5245544    | 139091        |
+| 8   | [iobench]  | metric_name_io  | 9      | 5326670    | 112943        |
+| 11  | [iobench]  | metric_name_io  | 7      | 5375461    | 136892        |
+| 10  | [iobench]  | metric_name_io  | 7      | 5385508    | 132044        |
+| 8   | [iobench]  | metric_name_io  | 7      | 5440777    | 135121        |
+| 11  | [iobench]  | metric_name_io  | 7      | 5513386    | 137326        |
+| 10  | [iobench]  | metric_name_io  | 7      | 5518577    | 141772        |
+| 8   | [iobench]  | metric_name_io  | 7      | 5576714    | 130237        |
+| 6   | [cpubench] | metric_name_cpu | 1      | 5362370    | 400302        |
+| 11  | [iobench]  | metric_name_io  | 4      | 5651444    | 234482        |
+| 10  | [iobench]  | metric_name_io  | 4      | 5661254    | 237934        |
+| 8   | [iobench]  | metric_name_io  | 4      | 5707771    | 250174        |
+| 11  | [iobench]  | metric_name_io  | 3      | 5886897    | 264076        |
+| 6   | [cpubench] | metric_name_cpu | 1      | 5763701    | 510677        |
+| 6   | [cpubench] | metric_name_cpu | 9      | 6274616    | 58774         |
+| 6   | [cpubench] | metric_name_cpu | 9      | 6333616    | 59216         |
+| 6   | [cpubench] | metric_name_cpu | 9      | 6393036    | 53979         |
+| 6   | [cpubench] | metric_name_cpu | 8      | 6447239    | 61750         |
+| 6   | [cpubench] | metric_name_cpu | 8      | 6509204    | 61188         |
+| 6   | [cpubench] | metric_name_cpu | 9      | 6570621    | 55809         |
